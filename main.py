@@ -55,7 +55,7 @@ def get_args(default_args_dict: dict) -> dict:
         new_convert_only_format.append(file_format.lower())
     convert_only_format = new_convert_only_format
     keep_original = args_dict['keep_original']
-    keep_original_str = ('Keep original files? (y/n):')
+    keep_original_str = input('Keep original files? (y/n):')
     if keep_original_str.lower() == 'y' or keep_original_str.lower() == 'yes':
         keep_original = True
 
