@@ -1,8 +1,38 @@
 import os
 import shutil
+import tkinter as tk
 from tkinter import *
 from datetime import datetime
 from tkinter import filedialog
+
+
+def show_tooltip(window, text: str):
+    # Create a new top-level window with the tooltip text
+    window.tooltip_window = tk.Toplevel(window)
+    tooltip_label = tk.Label(
+        window.tooltip_window,
+        text=text,
+        wraplength=300,
+        justify='left',
+        bg='lightyellow',
+        padx=10,
+        pady=5,
+    )
+    tooltip_label.pack()
+
+    # Use the overrideredirect method to remove the window's decorations
+    window.tooltip_window.overrideredirect(True)
+
+    # Calculate the coordinates for the tooltip window
+    x = window.winfo_pointerx() + 20
+    y = window.winfo_pointery() + 20
+    window.tooltip_window.geometry('+{}+{}'.format(x, y))
+
+
+def hide_tooltip(window):
+    # Destroy the tooltip window
+    window.tooltip_window.destroy()
+    window.tooltip_window = None
 
 
 def add_text_to_string_var(string_var, text):
@@ -18,7 +48,8 @@ def file_renamer_gui_():
     root = Tk()
     # root window title and dimension
     root.title('File Renamer')
-    # root.geometry('560x450')
+    root.iconbitmap('resources/images/icon_1.ico')
+    # root.iconbitmap('resources/images/icon_2.ico')
 
     columnspan = 4
     pady = 10
@@ -30,7 +61,11 @@ def file_renamer_gui_():
 
     # input_folder_path
     row = 0
-    Label(input_frame, text='Path to the video folder:').grid(column=0, row=row, sticky=W)
+    label_input_path = Label(input_frame, text='Path to the video folder:')
+    label_input_path.grid(column=0, row=row, sticky=W, pady=pady)
+    input_path_tooltip = 'Select the folder where the files are located.'
+    label_input_path.bind("<Enter>", lambda event: show_tooltip(window=root, text=input_path_tooltip))
+    label_input_path.bind("<Leave>", lambda event: hide_tooltip(window=root))
     input_folder_path = StringVar(input_frame, value='')
 
     def browse_input_folders():
@@ -52,11 +87,12 @@ def file_renamer_gui_():
 
     # output_folder_path
     row += 1
-    Label(input_frame, text='Path to destination folder: (Leave empty to use the same as input)', wraplength=200).grid(
-        column=0,
-        row=row,
-        sticky=W,
-    )
+    label_output_path = Label(input_frame, text='Path to destination folder: (optional)')
+    label_output_path.grid(column=0, row=row, sticky=W, pady=pady)
+    output_path_tooltip = 'Select the folder where the renamed files will be saved. If not specified, the renamed ' \
+                          'files will be saved in the same folder as the original files.'
+    label_output_path.bind("<Enter>", lambda event: show_tooltip(window=root, text=output_path_tooltip))
+    label_output_path.bind("<Leave>", lambda event: hide_tooltip(window=root))
     output_folder_path = StringVar(input_frame, value='')
 
     def browse_output_folders():
@@ -77,14 +113,24 @@ def file_renamer_gui_():
     )
 
     # name_prefix
-    row += 2
-    Label(input_frame, text='Prefix for file names (optional):').grid(column=0, row=row, pady=pady, sticky=W)
+    row += 1
+    prefix_label = Label(input_frame, text='Prefix for file names (optional):')
+    prefix_label.grid(column=0, row=row, pady=pady, sticky=W)
+    prefix_tooltip = 'Add a prefix to the new file names. The prefix will be followed by the date and time' \
+                     ' the file was created.'
+    prefix_label.bind("<Enter>", lambda event: show_tooltip(window=root, text=prefix_tooltip))
+    prefix_label.bind("<Leave>", lambda event: hide_tooltip(window=root))
     name_prefix = StringVar(input_frame, value='')
     Entry(input_frame, width=40, textvariable=name_prefix).grid(column=1, row=row, columnspan=columnspan, pady=pady)
 
     # name_suffix
     row += 1
-    Label(input_frame, text='Suffix for file names (optional):').grid(column=0, row=row, pady=pady, sticky=W)
+    suffix_label = Label(input_frame, text='Suffix for file names (optional):')
+    suffix_label.grid(column=0, row=row, pady=pady, sticky=W)
+    suffix_tooltip = 'Add a suffix to the new file names. The suffix will be preceded by the date and time' \
+                     ' the file was created.'
+    suffix_label.bind("<Enter>", lambda event: show_tooltip(window=root, text=suffix_tooltip))
+    suffix_label.bind("<Leave>", lambda event: hide_tooltip(window=root))
     name_suffix = StringVar(input_frame, value='')
     Entry(input_frame, width=40, textvariable=name_suffix).grid(column=1, row=row, columnspan=columnspan, pady=pady)
 
@@ -101,10 +147,15 @@ def file_renamer_gui_():
 
     # keep_original
     row += 1
-    Label(input_frame, text='Keep original files?').grid(column=0, row=row, pady=pady, sticky=W)
+    keep_files_label = Label(input_frame, text='Keep original files?')
+    keep_files_label.grid(column=0, row=row, pady=pady * 2, sticky=W)
+    keep_files_tooltip = '"Yes": change name and location of copies of the original files, to keep them unchanged.' \
+                         '\n"No": the original files will be renamed and moved to the destination folder.'
+    keep_files_label.bind("<Enter>", lambda event: show_tooltip(window=root, text=keep_files_tooltip))
+    keep_files_label.bind("<Leave>", lambda event: hide_tooltip(window=root))
     keep_original_int = IntVar(input_frame, value=0)
-    Radiobutton(input_frame, text='Yes', value=1, variable=keep_original_int).grid(column=1, row=row, pady=pady)
-    Radiobutton(input_frame, text='No', value=0, variable=keep_original_int).grid(column=2, row=row, pady=pady)
+    Radiobutton(input_frame, text='Yes', value=1, variable=keep_original_int).grid(column=1, row=row, pady=pady * 2)
+    Radiobutton(input_frame, text='No', value=0, variable=keep_original_int).grid(column=2, row=row, pady=pady * 2)
 
     # verbose
     # row += 1
@@ -136,6 +187,8 @@ def file_renamer_gui_():
     # ok and exit buttons
     ok_button_handle = Button(control_frame, text='OK', width=10, command=rename_files_local_args)
     ok_button_handle.pack(side=LEFT, padx=135, pady=pady)
+    # ok_button_handle.bind("<Enter>", lambda event: show_tooltip(window=root, text='Start renaming files'))
+    # ok_button_handle.bind("<Leave>", lambda event: hide_tooltip(window=root))
     Button(control_frame, text='Exit', width=10, command=root.destroy).pack(side=LEFT, padx=0, pady=pady)
 
     # FRAME 3
@@ -152,8 +205,8 @@ def file_renamer_gui_():
         relief='sunken',
         justify=LEFT,
         textvariable=console_output_channel,
-        # padx=50,
-        # pady=50,
+        padx=5,
+        pady=5,
     )
     console_output_label.pack(side=LEFT, fill=BOTH, expand=True)
 
@@ -169,7 +222,7 @@ def process_args(args_dict: dict) -> dict:
     if not os.path.exists(input_folder_path):
         add_text_to_string_var(
             string_var=console_output_channel,
-            text=f'ERROR: Input folder does not exists: {input_folder_path}'
+            text=f'ERROR: Input folder does not exists: "{input_folder_path}"'
                  f'\nProgram terminated. 0 files have been renamed.')
         return {}
 
@@ -179,7 +232,7 @@ def process_args(args_dict: dict) -> dict:
         if not os.path.exists(output_folder_path):
             add_text_to_string_var(
                 string_var=console_output_channel,
-                text=f'ERROR: Output folder does not exists: {output_folder_path}'
+                text=f'ERROR: Output folder does not exists: "{output_folder_path}"'
                      f'\nProgram terminated. 0 files have been renamed.')
             return {}
 
@@ -242,6 +295,9 @@ def rename_files(**kwargs):
     console_output_channel = processed_kwargs['console_output_channel']
     keep_original = processed_kwargs['keep_original']
     counter = 0
+    if processed_kwargs['verbose']:
+        add_text_to_string_var(string_var=console_output_channel, text='Converting files...')
+
     with os.scandir(input_folder_path) as dir_entry_iterator:
         for entry in dir_entry_iterator:
             if entry.is_file():
