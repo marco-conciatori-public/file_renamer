@@ -152,7 +152,7 @@ def file_renamer_gui_():
                          '\n"No": the original files will be renamed and moved to the destination folder.'
     keep_files_label.bind("<Enter>", lambda event: show_tooltip(window=root, text=keep_files_tooltip))
     keep_files_label.bind("<Leave>", lambda event: hide_tooltip(window=root))
-    keep_original_int = IntVar(input_frame, value=0)
+    keep_original_int = IntVar(input_frame, value=1)
     Radiobutton(input_frame, text='Yes', value=1, variable=keep_original_int).grid(column=1, row=row, pady=pady * 2)
     Radiobutton(input_frame, text='No', value=0, variable=keep_original_int).grid(column=2, row=row, pady=pady * 2)
 
