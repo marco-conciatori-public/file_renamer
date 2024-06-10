@@ -48,6 +48,7 @@ def file_renamer_gui_():
     root = Tk()
     # root window title and dimension
     root.title('File Renamer')
+    # root window icon
     # root.iconbitmap('resources/images/icon_1.ico')
     # root window min size
     root.minsize(width=450, height=355)
