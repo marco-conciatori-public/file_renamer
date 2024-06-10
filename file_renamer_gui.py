@@ -54,6 +54,11 @@ def file_renamer_gui_():
     pady = 10
     padx = 10
 
+    # add global left padding
+    Frame(root, width=10).pack(side=LEFT, fill=X, expand=True)
+    # add global right padding
+    Frame(root, width=10).pack(side=RIGHT, fill=X, expand=True)
+
     # FRAME 1
     input_frame = Frame(root)
     input_frame.pack(side=TOP, fill=X, expand=False)
