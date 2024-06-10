@@ -49,6 +49,8 @@ def file_renamer_gui_():
     # root window title and dimension
     root.title('File Renamer')
     # root.iconbitmap('resources/images/icon_1.ico')
+    # root window min size
+    root.minsize(width=450, height=355)
 
     columnspan = 4
     pady = 10
@@ -168,6 +170,12 @@ def file_renamer_gui_():
     # Radiobutton(input_frame, text='Yes', value=1, variable=verbose_int).grid(column=1, row=row)
     # Radiobutton(input_frame, text='No', value=0, variable=verbose_int).grid(column=2, row=row)
     # verbose = bool(verbose_int.get())
+
+    # expand entry widget when window is resized
+    # input_frame.grid_columnconfigure(index=0, weight=0, minsize=100)
+    input_frame.grid_columnconfigure(index=1, weight=1, minsize=40)
+    # input_frame.grid_columnconfigure(index=2, weight=1, minsize=50)
+    # input_frame.grid_columnconfigure(index=2 + columnspan, weight=0, minsize=50)
 
     # FRAME 2
     control_frame = Frame(root)
