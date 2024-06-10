@@ -203,7 +203,7 @@ def file_renamer_gui_():
     # label description
     Label(console_output_frame, text='Console output:', anchor=W).pack(side=TOP, fill=X, expand=False)
     # console output
-    console_output_channel = StringVar(console_output_frame, value='Console output:')
+    console_output_channel = StringVar(console_output_frame, value='')
     console_output_label = Label(
         console_output_frame,
         anchor=NW,
