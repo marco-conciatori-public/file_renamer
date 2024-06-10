@@ -190,7 +190,6 @@ def file_renamer_gui_():
         ok_button_handle.config(state=DISABLED)
     # ok and exit buttons
     ok_button_handle = Button(control_frame, text='OK', width=10, command=rename_files_local_args)
-    ok_button_handle.pack(side=LEFT, padx=135, pady=pady)
     # ok_button_handle.bind("<Enter>", lambda event: show_tooltip(window=root, text='Start renaming files'))
     # ok_button_handle.bind("<Leave>", lambda event: hide_tooltip(window=root))
     Button(control_frame, text='Exit', width=10, command=root.destroy).pack(side=LEFT, padx=0, pady=pady)
