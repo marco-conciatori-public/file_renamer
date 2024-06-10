@@ -196,6 +196,12 @@ def file_renamer_gui_():
     # FRAME 3
     console_output_frame = Frame(root)
     console_output_frame.pack(side=BOTTOM, fill=BOTH, expand=True)
+    # Separator between input and output frames
+    separator = Frame(root, height=2, bd=1, relief=SUNKEN)
+    separator.pack(fill=X, padx=5, pady=5)
+
+    # label description
+    Label(console_output_frame, text='Console output:', anchor=W).pack(side=TOP, fill=X, expand=False)
     # console output
     console_output_channel = StringVar(console_output_frame, value='Console output:')
     console_output_label = Label(
